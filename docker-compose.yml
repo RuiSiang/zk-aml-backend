@@ -3,15 +3,29 @@ version: "3"
 networks:
     default:
         external:
-            name: iov-poc-ingress
+            name: aml-ingress
 
 services:
-    web:
-        container_name: web
+    web-org1:
+        container_name: web-org1
         image: node:lts-alpine3.12
         working_dir: /app
+        environment:
+            - MSPID=Org1MSP
         volumes:
            - ./:/app
         command: node ./dist/bin/server.js
         ports:
-            - "80:3000" 
+            - "5001:3000"
+
+    web-org2:
+        container_name: web-org2
+        image: node:lts-alpine3.12
+        working_dir: /app
+        environment:
+            - MSPID=Org2MSP
+        volumes:
+           - ./:/app
+        command: node ./dist/bin/server.js
+        ports:
+            - "5002:3000"
