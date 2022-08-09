@@ -1,5 +1,3 @@
-const saltedSha256 = require('salted-sha256')
-const moment = require('moment')
 import fabricService from './fabric-service'
 
 const orgList: string[] = ['', 'Org1MSP', 'Org2MSP', 'Org3MSP']
