@@ -1,5 +1,4 @@
-config/connectionprofile.json
-
+config-*
 # Logs
 logs
 *.log

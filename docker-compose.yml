@@ -6,26 +6,19 @@ networks:
             name: aml-ingress
 
 services:
-    web-org1:
-        container_name: web-org1
-        image: node:lts-alpine3.12
-        working_dir: /app
-        environment:
-            - MSPID=Org1MSP
+    zk-relay-backend-org1:
+        container_name: zk-relay-backend-org1
+        image: zk-relay-backend
         volumes:
-           - ./:/app
-        command: node ./dist/app.js
+           - ./config-org1:/usr/src/zk-aml-backend/config
+        command: node app.js
         ports:
             - "5001:3000"
-
-    web-org2:
-        container_name: web-org2
-        image: node:lts-alpine3.12
-        working_dir: /app
-        environment:
-            - MSPID=Org2MSP
+    zk-relay-backend-org2:
+        container_name: zk-relay-backend-org2
+        image: zk-relay-backend
         volumes:
-           - ./:/app
-        command: node ./dist/app.js
+           - ./config-org2:/usr/src/zk-aml-backend/config
+        command: node app.js
         ports:
             - "5002:3000"
