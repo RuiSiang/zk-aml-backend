@@ -8,7 +8,6 @@ import {
 } from 'fabric-network'
 import Entry from '../src/entry-service'
 
-// const mspid = "Org1MSP";
 const mspid = process.env.MSPID || 'Org1MSP'
 
 interface invokeChaincodeResponse {
@@ -17,6 +16,7 @@ interface invokeChaincodeResponse {
 
 async function listen() {
   console.log('Listener attached')
+  console.log(`MSPID: ${mspid}`)
   const connectionProfileJson = fs
     .readFileSync('./config/connectionprofile.json')
     .toString()
