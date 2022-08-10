@@ -12,6 +12,8 @@ services:
         volumes:
            - ./config-org1:/usr/src/zk-aml-backend/config
         command: node app.js
+        environment:
+            - MSPID=Org1MSP
         ports:
             - "5001:3000"
     zk-relay-backend-org2:
@@ -20,5 +22,7 @@ services:
         volumes:
            - ./config-org2:/usr/src/zk-aml-backend/config
         command: node app.js
+        environment:
+            - MSPID=Org2MSP
         ports:
             - "5002:3000"
