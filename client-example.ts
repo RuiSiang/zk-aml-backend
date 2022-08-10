@@ -61,6 +61,5 @@ export default class Client {
 }
 
 const client = Client.getInstance('http://localhost:80')
-client.subscribe('Bank B')
-client.transmit('0003', 'Bank A', '100', '0x01')
-client.transmit('0002', 'Bank B', '100', '0x01', 'Org1MSP')
+client.subscribe('Bank A')
+client.transmit('0002', 'Bank B', '100', '0x01', 'Org2MSP')
