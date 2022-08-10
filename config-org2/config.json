@@ -1,0 +1,5 @@
+{
+  "myBank": "Bank B",
+  "myOrg": "Org2MSP",
+  "orgList": ["", "Org1MSP", "Org2MSP", "Org3MSP"]
+}

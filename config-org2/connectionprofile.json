@@ -1,0 +1,26 @@
+{
+  "name": "Network",
+  "version": "1.1",
+  "channels": {
+    "myc": {
+      "orderers": ["orderer"],
+      "peers": ["org2"]
+    }
+  },
+  "organizations": {
+    "Org2": {
+      "mspid": "Org2MSP",
+      "peers": ["org2"]
+    }
+  },
+  "orderers": {
+    "orderer": {
+      "url": "grpc://orderer:7050"
+    }
+  },
+  "peers": {
+    "org2": {
+      "url": "grpc://org2:7051"
+    }
+  }
+}
