@@ -51,6 +51,7 @@ async function newEntry(data: {
   if (!checkList(data.privateFor || '')) {
     data.privateFor = ''
   }
+  console.log(`Submitting data private for ${data.privateFor}`)
   // const id = await saltedSha256(JSON.stringify(data), moment(), true)
   const from = Buffer.from(data.from)
   const to = Buffer.from(data.to)
