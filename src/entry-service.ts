@@ -71,10 +71,7 @@ async function newEntry(data: {
 async function relayEntry(argsStr: string[]) {
   if (argsStr[0] == 'newEntry') {
     const id = argsStr[1]
-    let invokeResult = await fabricService.invokeChaincode('getEntry', [
-      id,
-      config.myOrg || '',
-    ])
+    let invokeResult = await fabricService.invokeChaincode('getEntry', [id])
     if (invokeResult) {
       const payload = JSON.parse(invokeResult.invokeResult)
       console.log('Payload received: ', payload)
