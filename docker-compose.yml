@@ -14,7 +14,7 @@ services:
             - MSPID=Org1MSP
         volumes:
            - ./:/app
-        command: node ./dist/bin/server.js
+        command: node ./dist/app.js
         ports:
             - "5001:3000"
 
@@ -26,6 +26,6 @@ services:
             - MSPID=Org2MSP
         volumes:
            - ./:/app
-        command: node ./dist/bin/server.js
+        command: node ./dist/app.js
         ports:
             - "5002:3000"

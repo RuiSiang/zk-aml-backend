@@ -1,10 +1,16 @@
 import fabricService from './fabric-service'
+import fs from 'fs'
+import path from 'path'
+import { server } from '../app'
 
-const orgList: string[] = ['', 'Org1MSP', 'Org2MSP', 'Org3MSP']
+const config = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'config', 'config.json'), 'utf-8') ||
+    '{}'
+)
 //checklist function
 function checkList(candidate: string) {
-  for (let i = 0; i < orgList.length; i++) {
-    if (orgList[i] == candidate) {
+  for (let i = 0; i < config.orgList.length; i++) {
+    if (config.orgList[i] == candidate) {
       return true
     }
   }
@@ -31,17 +37,18 @@ async function getEntries(member: string) {
   return <Entry[]>JSON.parse(invokeResult)
 }
 
-interface INewEntryParams {
+async function newEntry(data: {
   id: string
   from: string
   to: string
   amount: string
   proof: string
-  privateFor: string
-}
-
-async function newEntry(data: INewEntryParams) {
-  if (!checkList(data.privateFor)) {
+  privateFor?: string
+}) {
+  if (!data.privateFor) {
+    data.privateFor = config.myOrg || ''
+  }
+  if (!checkList(data.privateFor || '')) {
     data.privateFor = ''
   }
   // const id = await saltedSha256(JSON.stringify(data), moment(), true)
@@ -49,12 +56,36 @@ async function newEntry(data: INewEntryParams) {
   const to = Buffer.from(data.to)
   const amount = Buffer.from(data.amount)
   const proof = Buffer.from(data.proof)
-  await fabricService.invokeChaincode('newEntry', [data.id, data.privateFor], {
-    from,
-    to,
-    amount,
-    proof,
-  })
+  await fabricService.invokeChaincode(
+    'newEntry',
+    [data.id, data.privateFor || ''],
+    {
+      from,
+      to,
+      amount,
+      proof,
+    }
+  )
 }
 
-export default { getEntries, newEntry }
+async function relayEntry(argsStr: string[]) {
+  if (argsStr[0] == 'newEntry') {
+    const id = argsStr[1]
+    let invokeResult = await fabricService.invokeChaincode('getEntry', [
+      id,
+      config.myOrg || '',
+    ])
+    if (invokeResult) {
+      const payload = JSON.parse(invokeResult.invokeResult)
+      console.log('Payload received: ', payload)
+      if (payload.to == (config.myBank || '')) {
+        server.to('broadcast').emit('relay', payload)
+        console.log('Payload relayed')
+      } else {
+        console.log('Payload dropped')
+      }
+    }
+  }
+}
+
+export default { getEntries, newEntry, relayEntry }

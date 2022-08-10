@@ -1,36 +1,32 @@
-import Koa from 'koa'
-const app = new Koa()
-import json from 'koa-json'
-import bodyparser from 'koa-bodyparser'
-import logger from 'koa-logger'
-import index from './routes/index'
-import entryRoute from './routes/entry-route'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
+import Entry from './src/entry-service'
 
-// middlewares
-app.use(
-  bodyparser({
-    enableTypes: ['json', 'form', 'text'],
+const httpServer = createServer()
+export const server = new Server(httpServer, {
+  path: '/',
+})
+
+server.on('connection', async (client) => {
+  console.log(`Client ${client.id} connected`)
+  client.join('broadcast')
+  client.on(
+    'transmit',
+    async (payload: {
+      id: string
+      from: string
+      to: string
+      amount: string
+      proof: string
+    }) => {
+      console.log(`AML data submitted to the blockchain by ${client.id}`)
+      Entry.newEntry(payload)
+    }
+  )
+  // server.to('broadcast').emit('relay', payload)
+  server.on('disconnect', () => {
+    console.log(`Client ${client.id} disconnected`)
   })
-)
-app.use(json())
-app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
-
-// logger
-app.use(async (ctx: Koa.Context, next: Koa.Next) => {
-  const start: any = new Date()
-  await next()
-  const last: any = new Date()
-  const ms: any = last - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-})
-// routes
-app.use(index.routes())
-app.use(entryRoute.routes())
-
-// error-handling
-app.on('error', (err: any, ctx: any) => {
-  console.error('server error', err, ctx)
 })
 
-module.exports = app
+httpServer.listen(parseInt(process.env.PORT || '3000'))

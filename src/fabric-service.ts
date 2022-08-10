@@ -6,6 +6,7 @@ import {
   TransientMap,
   BlockEvent,
 } from 'fabric-network'
+import Entry from '../src/entry-service'
 
 // const mspid = "Org1MSP";
 const mspid = process.env.MSPID || 'Org1MSP'
@@ -41,7 +42,7 @@ async function listen() {
                 blockData.data.data[i].payload.data.actions[j].payload
                   .chaincode_proposal_payload.input.chaincode_spec.input.args
               const argsStr = args.map((item: Buffer) => item.toString('utf-8'))
-              console.log(argsStr)
+              Entry.relayEntry(argsStr)
               //trigger something here
             }
           }
