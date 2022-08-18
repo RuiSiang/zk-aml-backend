@@ -26,6 +26,22 @@ export interface Entry {
   proof: string
 }
 
+export interface Keypair {
+  pk: string
+  vk: string
+}
+
+async function getKeypair() {
+  let tmpResult = await fabricService.invokeChaincode('getKeypair', [])
+  let invokeResult: string
+  if (tmpResult) {
+    invokeResult = tmpResult.invokeResult
+  } else {
+    invokeResult = '{}'
+  }
+  return <Keypair>JSON.parse(invokeResult)
+}
+
 async function getEntries(member: string) {
   let tmpResult = await fabricService.invokeChaincode('getEntries', [member])
   let invokeResult: string
@@ -86,4 +102,4 @@ async function relayEntry(argsStr: string[]) {
   }
 }
 
-export default { getEntries, newEntry, relayEntry }
+export default { getKeypair, getEntries, newEntry, relayEntry }
