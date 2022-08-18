@@ -26,3 +26,13 @@ services:
             - MSPID=Org2MSP
         ports:
             - "5002:3000"
+    zk-aml-backend-org3:
+        container_name: zk-aml-backend-org3
+        image: zk-aml-backend
+        volumes:
+           - ./config-org3:/usr/src/zk-aml-backend/config
+        command: node app.js
+        environment:
+            - MSPID=Org3MSP
+        ports:
+            - "5003:3000"
