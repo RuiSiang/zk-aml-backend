@@ -10,6 +10,7 @@ export const server = new Server(httpServer, {
 server.on('connection', async (client) => {
   console.log(`Client ${client.id} connected`)
   client.join('broadcast')
+  client.emit('keypair', await Entry.getKeypair())
   client.on(
     'transmit',
     async (payload: {
@@ -20,7 +21,7 @@ server.on('connection', async (client) => {
       proof: string
     }) => {
       console.log(`AML data submitted to the blockchain by ${client.id}`)
-      Entry.newEntry(payload)
+      await Entry.newEntry(payload)
     }
   )
   // server.to('broadcast').emit('relay', payload)

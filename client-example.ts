@@ -4,6 +4,8 @@ export default class Client {
   private socket: Socket
   private static instance: Client
   private bank: string = ''
+  private pk: string = ''
+  private vk: string = ''
 
   public static getInstance(url: string) {
     if (!Client.instance) {
@@ -26,6 +28,10 @@ export default class Client {
     this.socket.on('disconnect', () => {
       console.log('Disconnected from relay server')
     })
+    this.socket.on('keypair', (payload) => {
+      this.pk = payload.pk
+      this.vk = payload.vk
+    })
     this.socket.on('relay', (payload) => {
       // do something
       console.log('Received payload from relay:', payload)
@@ -35,6 +41,7 @@ export default class Client {
     if (this.bank) {
       throw new Error('You can only subscribe to one bank')
     }
+    console.log(`Fetched keypair`)
     this.bank = bank
     console.log(`Subscribed to bank ${bank}`)
   }
