@@ -25,7 +25,6 @@ class Aml {
 
   //initialize
   public initialize = async () => {
-    await zokrates.initialize()
     const { vk } = await zokrates.genKey()
     await fabricService.invokeChaincode('setKey', [JSON.stringify(vk)])
   }
@@ -108,6 +107,5 @@ class Aml {
 }
 
 const aml = new Aml()
-aml.initialize()
 
 export default aml

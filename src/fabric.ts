@@ -14,7 +14,7 @@ interface invokeChaincodeResponse {
   invokeResult: string
 }
 
-async function listen() {
+export async function listen() {
   console.log('Listener attached')
   console.log(`MSPID: ${mspid}`)
   const connectionProfileJson = fs
@@ -57,7 +57,6 @@ async function listen() {
     console.error('Listener malfunctioned')
   }
 }
-listen()
 
 async function invokeChaincode(
   transaction: string,
@@ -97,4 +96,4 @@ async function invokeChaincode(
   }
 }
 
-export default { invokeChaincode, mspid }
+export default { invokeChaincode, mspid, listen }

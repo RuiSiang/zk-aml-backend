@@ -2,6 +2,7 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import zokrates from './src/zokrates'
 import aml from './src/logic'
+import fabric from './src/fabric'
 
 const httpServer = createServer()
 export const server = new Server(httpServer, {
@@ -38,5 +39,7 @@ server.on('connection', async (client) => {
     console.log(`Client ${client.id} disconnected`)
   })
 })
+
+fabric.listen().then(zokrates.initialize).then(aml.initialize)
 
 httpServer.listen(parseInt(process.env.PORT || '3000'))
