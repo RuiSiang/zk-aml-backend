@@ -1,5 +1,16 @@
 {
   "myBank": "Bank A",
   "myOrg": "Org1MSP",
-  "orgList": ["", "Org1MSP", "Org2MSP", "Org3MSP"]
+  "bankList": ["Bank A", "Bank B", "Bank C"],
+  "orgList": ["Org1MSP", "Org2MSP", "Org3MSP"],
+  "bankOrgMap": {
+    "Bank A": "Org1MSP",
+    "Bank B": "Org2MSP",
+    "Bank C": "Org3MSP"
+  },
+  "orgBankMap": {
+    "Org1MSP": "Bank A",
+    "Org2MSP": "Bank B",
+    "Org3MSP": "Bank C"
+  }
 }

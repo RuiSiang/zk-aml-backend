@@ -8,7 +8,7 @@
     }
   },
   "organizations": {
-    "Org2": {
+    "Org3": {
       "mspid": "Org3MSP",
       "peers": ["org3"]
     }
@@ -19,7 +19,7 @@
     }
   },
   "peers": {
-    "org2": {
+    "org3": {
       "url": "grpc://org3:7051"
     }
   }

@@ -1,6 +1,7 @@
 import { createServer } from 'http'
 import { Server } from 'socket.io'
-import Entry from './src/entry-service'
+import zokrates from './src/zokrates'
+import aml from './src/logic'
 
 const httpServer = createServer()
 export const server = new Server(httpServer, {
@@ -10,18 +11,26 @@ export const server = new Server(httpServer, {
 server.on('connection', async (client) => {
   console.log(`Client ${client.id} connected`)
   client.join('broadcast')
-  client.emit('keypair', await Entry.getKeypair())
+  client.emit('bank', aml.getMyBank())
   client.on(
-    'transmit',
+    'prove',
     async (payload: {
       id: string
-      from: string
+      from?: string
       to: string
       amount: string
-      proof: string
+      answerList: string[]
     }) => {
       console.log(`AML data submitted to the blockchain by ${client.id}`)
-      await Entry.newEntry(payload)
+      console.log(payload)
+      const proof = JSON.stringify(await zokrates.prove(payload.answerList))
+      await aml.newEntry({
+        id: payload.id,
+        from: payload.from,
+        to: payload.to,
+        amount: payload.amount,
+        proof,
+      })
     }
   )
   // server.to('broadcast').emit('relay', payload)
