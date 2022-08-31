@@ -7,6 +7,9 @@ import fabric from './src/fabric'
 const httpServer = createServer()
 export const server = new Server(httpServer, {
   path: '/',
+  cors: {
+    origin: '*',
+  },
 })
 
 server.on('connection', async (client) => {
