@@ -27,13 +27,6 @@ export default class Client {
     this.socket.on('disconnect', () => {
       console.log('Disconnected from relay server')
     })
-    this.socket.on('keypair', (payload) => {
-      this.pk = payload.pk
-      this.vk = payload.vk
-      console.log('Fetched keypair')
-      console.log('Proving key: ', this.pk)
-      console.log('Verification key: ', this.vk)
-    })
     this.socket.on('bank', (payload) => {
       // do something
       console.log('System using identity of:', payload)
