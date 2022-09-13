@@ -25,16 +25,20 @@ server.on('connection', async (client) => {
       amount: string
       answerList: string[]
     }) => {
-      console.log(`AML data submitted to the blockchain by ${client.id}`)
-      console.log(payload)
-      const proof = JSON.stringify(await zokrates.prove(payload.answerList))
-      await aml.newEntry({
-        id: payload.id,
-        from: payload.from,
-        to: payload.to,
-        amount: payload.amount,
-        proof,
-      })
+      try {
+        console.log(`AML data submitted to the blockchain by ${client.id}`)
+        console.log(payload)
+        const proof = JSON.stringify(await zokrates.prove(payload.answerList))
+        await aml.newEntry({
+          id: payload.id,
+          from: payload.from,
+          to: payload.to,
+          amount: payload.amount,
+          proof,
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
   )
   // server.to('broadcast').emit('relay', payload)
